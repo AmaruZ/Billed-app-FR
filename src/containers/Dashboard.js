@@ -44,7 +44,7 @@ export const card = (bill) => {
         <span> ${bill.amount} € </span>
       </div>
       <div class='date-type-container'>
-        <span> ${formatDate(bill.date)} </span>
+        <span> ${bill.date} </span>
         <span> ${bill.type} </span>
       </div>
     </div>
@@ -52,6 +52,7 @@ export const card = (bill) => {
 }
 
 export const cards = (bills) => {
+
   return bills && bills.length ? bills.map(bill => card(bill)).join("") : ""
 }
 
@@ -137,6 +138,9 @@ export default class {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
+      filteredBills(bills, getStatus(this.index)).forEach(bill => {
+          $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+        })
       this.counter ++
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
@@ -144,10 +148,8 @@ export default class {
         .html("")
       this.counter ++
     }
+    
 
-    bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-    })
 
     return bills
 
